@@ -1,0 +1,26 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=12
+#PBS -l walltime=24:00:00
+#PBS -V
+#PBS -o /home/dish/varmint/messages/out
+#PBS -e /home/dish/varmint/messages/err
+
+if [ ! -d "/home/dish/messages/out" ]; then
+	mkdir -p "/home/dish/varmint/messages/out"
+fi
+
+if [ ! -d "/home/dish/messages/err" ]; then
+	mkdir -p "/home/dish/varmint/messages/err"
+fi
+
+if [ ! -d "/home/dish/messages/nodes" ]; then
+	mkdir -p "/home/dish/varmint/messages/nodes"
+fi
+
+nodes="/home/dish/varmint/messages/nodes/n$N.u$u"
+
+cd $PBS_O_WORKDIR
+echo $'Job has started running on nodes:\n' > $nodes
+cat $PBS_NODEFILE | uniq -c > $nodes
+
+python varmint.py $N $u 23.5 60 1 config

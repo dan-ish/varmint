@@ -1,0 +1,21 @@
+#!/bin/bash
+
+for n in $(seq 10 2 62)
+do
+    for u in $(seq -1 1 1)
+    do
+        if line=$(qstat -u dish | grep -w "n$n.u$u")
+        then
+            if echo $line | grep -w [RQ]>/dev/null
+            then
+                echo "N=$n u=$u running or in queue"
+            else
+                job=$(qsub -v N=$n,u=$u -N "n$n.u$u" sub_script)
+                echo "Adding N=$n as job $job"
+            fi
+        else
+            job=$(qsub -v N=$n,u=$u -N "n$n.u$u" sub_script)
+            echo "Adding N=$n u=$u as job $job"
+        fi
+    done
+done

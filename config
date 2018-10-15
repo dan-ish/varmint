@@ -1,0 +1,4 @@
+500             500      130   0.01
+Requested Runs  Max Bad  numT Tstep
+
+Note: the code only reads the first line
