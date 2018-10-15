@@ -9,7 +9,7 @@ So, to soften any opacity, I'll give a brief description of what each piece of t
 
 L(C,C) + T f(C)
 
-where L is randomly sampled from a particular distribution of symmetric bilinear forms, f is a convex function, T is a positive number and C is a real anti-symmetric matrix with eigenvalues bounded in absolute value by 1. It serially minimizes samples of L for a range of T by exploiting the fact that the function if convex with a unique minimum at C=0 for T>lambda_m, the minimum eigenvalue of the sample of L. It then computes various quantities of physical interest and takes further samples at larger N (the dimensions of C) to try to extract the leading order behavior of the distributions of these derived quantities at large N.
+where L is randomly sampled from a particular distribution of symmetric bilinear forms, f is certain a convex function, T is a positive number and C is a real anti-symmetric matrix with eigenvalues bounded in absolute value by 1. It serially minimizes samples of L for a range of T by exploiting the fact that the objectivefunction is convex with a unique minimum at C=0 for T>lambda_m, the minimum eigenvalue of the sample of L. It then computes various quantities of physical interest and takes further samples at larger N (the dimensions of C) to try to extract the leading order behavior of the distributions of these derived quantities at large N.
 
 A description of each of the files and their dependencies:
 
