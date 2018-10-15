@@ -1,0 +1,28 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Varmint (VARitational MINimizer) Numerical Minimization Program
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+At some point when I have time, I plan to clean code this up and comment it more thoroughly. This might be accompanied by me making some version of the commit history public as well. For now, though, I figured it is more valuable to have it public even if it screams "code I thought I would be the only one to use."
+
+So, to soften any opacity, I'll give a brief description of what each piece of the code does. The overall goals for the code are contained both in my dissertation (which appears to be caught in the wheels of the university bureaucracy and so not yet available for viewing online) and a paper in preparation. I'll update this section when either of those becomes generally available. Leaving aside the motivation for the problem, the code attempts to minimize a function of the form
+
+L(C,C) + T f(C)
+
+where L is randomly sampled from a particular distribution of symmetric bilinear forms, f is a convex function, T is a positive number and C is a real anti-symmetric matrix with eigenvalues bounded in absolute value by 1. It serially minimizes samples of L for a range of T by exploiting the fact that the function if convex with a unique minimum at C=0 for T>lambda_m, the minimum eigenvalue of the sample of L. It then computes various quantities of physical interest and takes further samples at larger N (the dimensions of C) to try to extract the leading order behavior of the distributions of these derived quantities at large N.
+
+A description of each of the files and their dependencies:
+
+submit: A bash script which submits jobs to a PBS scheduler to minimize samples at the desired parameter range
+
+sub_script: The bash script actually submitted to the scheduler. Does mild housekeeping and then calls the python code
+
+config: a text file for setting various control parameters
+
+varmint.py: The control and setup code. Reads config and call parameters to determine user intent. Sanitizes input. Instantiates controller and loads/instantiates container. Monitors the status of the controller and container and passes control to them when runs complete. Keeps track of walltime and closes down the code when time limit is reached. The original thread running sub_script spends most of its time waiting in varmint.py
+
+controller.py: Code for the controller object. Instantiates a process pool and spawns a user-defined number of worker threads each of which call "do_instance" from minimizer.py. Provides methods to check the progress of the computation.
+
+container.py: Code for the container object. Holds data and user defined parameters. Provides methods to update itself and save/load itself through pickle. Provides human-readable summaries of its contents.
+
+minimizer.py: Actual minimization code. Generates a sample of L. Computes derivatives of objective function using knowledge of structure of f. Calls built-in BFGS implementation for minimization.
